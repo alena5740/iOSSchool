@@ -38,16 +38,19 @@ class NetworkService {
 		var results = [UIImage]()
 
 		//ваш код сюда
+        let queue = DispatchQueue(label: "queue")
+        
         let myGroup = DispatchGroup()
+        
         for i in urls {
-            DispatchQueue.global().async(group: myGroup) {
+            queue.async(group: myGroup) {
                 if let data = try? Data(contentsOf: i) {
                     results.append(UIImage(data: data)!)
                 }
             }
         }
-        
-        myGroup.notify(queue: DispatchQueue.main) {
+                
+        myGroup.notify(queue: queue) {
             if let merged = ImagesServices.image(byCombining: results) {
                 completion(.success(merged))
             }
@@ -64,13 +67,16 @@ class NetworkService {
 		let keyURL = URL(string: "https://sberschool-c264c.firebaseio.com/enigma.json?avvrdd_token=AIzaSyDqbtGbRFETl2NjHgdxeOGj6UyS3bDiO-Y")!
 		
 		//ваш код сюда
+        let queue = DispatchQueue(label: "queue", attributes: .concurrent)
         let data = try? Data(contentsOf: keyURL)
         let str = try? JSONSerialization.jsonObject(with: data!, options: .allowFragments) as? String
         let url = URL(string: str!)
-
-        if let data1 = (try? Data(contentsOf: url!)) {
-            let image = UIImage(data: data1)
-            completion(.success(image!))
+        
+        queue.async {
+            if let data1 = (try? Data(contentsOf: url!)) {
+                let image = UIImage(data: data1)
+                completion(.success(image!))
+            }
         }
-	}
+    }
 }
