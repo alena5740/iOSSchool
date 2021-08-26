@@ -68,11 +68,11 @@ class NetworkService {
 		
 		//ваш код сюда
         let queue = DispatchQueue(label: "queue", attributes: .concurrent)
-        let data = try? Data(contentsOf: keyURL)
-        let str = try? JSONSerialization.jsonObject(with: data!, options: .allowFragments) as? String
-        let url = URL(string: str!)
         
         queue.async {
+            let data = try? Data(contentsOf: keyURL)
+            let str = try? JSONSerialization.jsonObject(with: data!, options: .allowFragments) as? String
+            let url = URL(string: str!)
             if let data1 = (try? Data(contentsOf: url!)) {
                 let image = UIImage(data: data1)
                 completion(.success(image!))
