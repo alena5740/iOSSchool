@@ -1,0 +1,16 @@
+//
+//  module.modulemap
+//  Interop
+//
+//  Created by Алена on 01.09.2021.
+//
+
+module LibOne {
+    umbrella header "../LibOne/UmbrellaHeader.h"
+    
+    export *
+}
+
+module SubLibOne {
+    umbrella header "../LibObjc2/UmbrellaHeader.h"
+}
